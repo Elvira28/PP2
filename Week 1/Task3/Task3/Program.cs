@@ -12,24 +12,26 @@ namespace Task3
         {
             /*вводим данные и сразу же переводим в тип данных integer*/
             int n = int.Parse(Console.ReadLine());
-            int[] arr = new int[n];
+            int[] arr = new int[2*n+1];
             string[] str = Console.ReadLine().Split();
-            List<int> list = new List<int>();
+            int temp = 0; // создаем временную переменную для того, чтобы обращаться к элементам массива string'ов
 
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i <= 2*n; i++)
             {
-                arr[i] = int.Parse(str[i]);
-            }
-            /*заполняем list, с динамическим размером, элементами массива:каждый два раза*/
-            for (int i = 0; i < n; i++)
+                arr[i] = 0;
+            } // обнуляем массив, чтобы заполнить его элементами
+            
+            for (int i = 0; i < 2*n - 1; i += 2)
             {
-                list.Add(arr[i]);
-                list.Add(arr[i]);
-            }
+                arr[i] = int.Parse(str[temp]);
+                arr[i + 1] = int.Parse(str[temp]);
+                temp++;
+            } // заполняем по 2 элемента массива integer'ов элементом из string'a
+            
             /*выводим массив*/
-            for (int i = 0; i < list.Count; i++)
+            for (int i = 0; i < 2*n; i++)
             {
-                Console.Write(list[i] + " ");
+                Console.Write(arr[i] + " ");
             }
 
             Console.ReadKey();
