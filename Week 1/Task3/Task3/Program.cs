@@ -28,10 +28,10 @@ namespace Task3
         {
             //вводим данные и сразу же переводим в тип данных integer
             int n = int.Parse(Console.ReadLine());
-            int[] arr = new int[2*n+1];
+            int[] arr = new int[2*n];
             string[] str = Console.ReadLine().Split();
 
-            for (int i = 0; i <= 2*n; i++)
+            for (int i = 0; i < 2*n; i++)
             {
                 arr[i] = 0;
             }// обнуляем массив
