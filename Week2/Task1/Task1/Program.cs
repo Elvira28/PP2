@@ -26,6 +26,7 @@ namespace Task1
                 Console.WriteLine("Yes");
             else
                 Console.WriteLine("No");
+            sr.Close();
             Console.ReadKey();
         }
     }
