@@ -9,7 +9,7 @@ namespace Task2
 {
     class Program
     {
-        public static bool IsPrime(int a)
+        public static bool IsPrime(int a) // method to check, whether the number is prime or not
         {
             if (a == 0)
                 return false;
@@ -26,9 +26,9 @@ namespace Task2
 
         static void Main(string[] args)
         {
-            StreamReader sr = new StreamReader("input.txt");
+            StreamReader sr = new StreamReader("input.txt"); // to read from the text file
             string s = sr.ReadToEnd();
-            sr.Close();
+            sr.Close(); 
 
             string[] str = s.Split();
             int[] arr = new int[10000];
@@ -38,9 +38,9 @@ namespace Task2
                 arr[i] = int.Parse(str[i]);
             }
 
-            StreamWriter sw = new StreamWriter("output.txt");
+            StreamWriter sw = new StreamWriter("output.txt"); // create text file to write in it
 
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i < s.Length; i++) // fill in "output" file
             {
                 if (IsPrime(arr[i]))
                     sw.Write(arr[i] + " ");
