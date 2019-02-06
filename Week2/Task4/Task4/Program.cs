@@ -12,7 +12,7 @@ namespace Task4
         public static void WithFile() // method to create, cope and delete file
         {
             StreamWriter lolkek = new StreamWriter("C:/PP1/keklol.txt"); // creating file
-            lolkek.WriteLine("govnyashka");
+            lolkek.WriteLine("tut dolzhn byt' kakoi-to tekst");
             lolkek.Close();
             File.Copy("C:/PP1/keklol.txt", "C:/work/keklol.txt"); // copying file
             File.Delete("C:/PP1/keklol.txt"); // deleting file
@@ -20,8 +20,8 @@ namespace Task4
 
         public static void WithDirectory() // method to create and move file
         {
-            Directory.CreateDirectory("C:/1 course/zhopa"); // creating directory
-            Directory.Move("C:/1 course/zhopa", "C:/work/zhopa"); // moving directory
+            Directory.CreateDirectory("C:/1 course/kakashka"); // creating directory
+            Directory.Move("C:/1 course/zhopa", "C:/work/kakashka"); // moving directory
             //Directory.Delete("C:/1 course/zhopa");  // we can not use delete function if we moved file 
         }
 
