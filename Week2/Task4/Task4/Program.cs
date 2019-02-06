@@ -21,7 +21,7 @@ namespace Task4
         public static void WithDirectory() // method to create and move file
         {
             Directory.CreateDirectory("C:/1 course/kakashka"); // creating directory
-            Directory.Move("C:/1 course/zhopa", "C:/work/kakashka"); // moving directory
+            Directory.Move("C:/1 course/kakashka", "C:/work/kakashka"); // moving directory
             //Directory.Delete("C:/1 course/zhopa");  // we can not use delete function if we moved file 
         }
 
