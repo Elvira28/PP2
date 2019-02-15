@@ -1,34 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Task1
 {
-    class FarManager
+    class FarManager //create needed variables
     {
         public bool dir;
         public int cursor;
         public string path;
         public int size;
-        public bool ok;
+        public bool hidden;
         DirectoryInfo direc = null;
         FileSystemInfo currentFs = null;
 
-        public FarManager()
+        public FarManager() // create constructor to get cursor to the 0-th string, if we open new folder
         {
             cursor = 0;
         }
 
-        public FarManager(string path)
+        public FarManager(string path) // constructor for all methods
         {
             this.path = path;
             cursor = 0;
             dir = true;
             direc = new DirectoryInfo(path);
             size = direc.GetFileSystemInfos().Length;
-            ok = true;
+            hidden = true;
         }
 
-        public void Color(FileSystemInfo fs, int indx)
+        public void Color(FileSystemInfo fs, int indx) // method to color folder, files and present string in different colors
         {
             if (cursor == indx)
             {
@@ -48,40 +50,54 @@ namespace Task1
             }
         }
 
-        public void Korset()
+
+        public void Korset() //method to sort and write all folders and files 
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
-            FileSystemInfo[] fs = direc.GetFileSystemInfos();
+            var folders = direc.GetDirectories();
+            var files = direc.GetFiles();
 
-            for (int i = 0, j = 0; i < fs.Length; i++)
+            int j = 0;
+            foreach (var i in folders)
             {
-                if (ok == false && (fs[i].Name.StartsWith(".") || fs[i].Name.StartsWith("$")))
+                if (hidden == false && (i.Name.StartsWith(".") || i.Name.StartsWith("$")))
                 {
                     continue;
                 }
-                Color(fs[i], j);
+                Color(i, j);
                 j++;
-                Console.WriteLine(j + ". " + fs[i].Name);
+                Console.WriteLine(j + ". " + i.Name);
+            }
 
+            int temp = j;
+            foreach(var i in files)
+            {
+                if (hidden == false && (i.Name.StartsWith(".") || i.Name.StartsWith("$")))
+                {
+                    continue;
+                }
+                Color(i, temp);
+                temp++;
+                Console.WriteLine(temp + ". " + i.Name);
             }
         }
 
-        public void UA()
+        public void UA() // if we push UpArrow - goes up in list
         {
             cursor--;
             if (cursor < 0)
-                cursor = size - 1;
+                cursor = size-1;
         }
 
-        public void DA()
-        {
+        public void DA() // if we push DownArrow - goes down in list
+        { 
             cursor++;
             if (cursor == size)
                 cursor = 0;
         }
 
-        public void CalcS()
+        public void CalcS() // to recalculate size every time, when we hide hidden files
         {
             direc = new DirectoryInfo(path);
             FileSystemInfo[] fs = direc.GetFileSystemInfos();
@@ -89,7 +105,7 @@ namespace Task1
 
             for (int i = 0; i < direc.GetFileSystemInfos().Length; i++)
             {
-                if ((fs[i].Name[0] == '.' || fs[i].Name[0] == '$') && ok == false)
+                if ((fs[i].Name[0] == '.' || fs[i].Name[0] == '$') && hidden == false)
                     size--;
             }
 
@@ -98,39 +114,45 @@ namespace Task1
         public void Rabotay()
         {
             ConsoleKeyInfo cki;
-            do {
-                if (dir)
+            do
+            {
+                if (dir) // if we in directory, recalculate size
                 {
                     CalcS();
                 }
+
                 Korset();
-                
+
                 cki = Console.ReadKey();
-                if (cki.Key == ConsoleKey.UpArrow)
+                if (cki.Key == ConsoleKey.UpArrow) // call method
                     UA();
-                if (cki.Key == ConsoleKey.DownArrow)
+
+                if (cki.Key == ConsoleKey.DownArrow) // call method
                     DA();
-                if (cki.Key == ConsoleKey.PageDown)
+
+                if (cki.Key == ConsoleKey.PageDown) // call method - hide hidden files
                 {
-                    ok = false;
-                    cursor = 0;
-                }
-                if (cki.Key == ConsoleKey.PageUp)
-                {
-                    ok = true;
+                    hidden = false;
                     cursor = 0;
                 }
 
-                if (cki.Key == ConsoleKey.Enter)
+                if (cki.Key == ConsoleKey.PageUp) // call method - show hidden files
+                {
+                    hidden = true;
+                    cursor = 0;
+                }
+
+                if (cki.Key == ConsoleKey.Enter) // open folder or file
                 {
                     cursor = 0;
                     if (currentFs.GetType() == typeof(DirectoryInfo))
                     {
                         path = currentFs.FullName;
-                    }
+                    } // if folder
 
                     else
                     {
+                        path = currentFs.FullName;
                         Console.Clear();
                         string str;
                         dir = false;
@@ -140,26 +162,25 @@ namespace Task1
                         Console.WriteLine(str);
                         Console.ReadKey();
                         sr.Close();
-                    }
+                        fs.Close();
+                    } // if file
                 }
 
                 if (cki.Key == ConsoleKey.Backspace)
                 {
-                    
+
                     cursor = 0;
                     path = direc.Parent.FullName;
                     dir = true;
-                }
-
-
+                } // to go back to previous folder
 
                 if (cki.Key == ConsoleKey.Delete)
                 {
                     if (currentFs.GetType() == typeof(DirectoryInfo))
-                        Directory.Delete(path);
+                        Directory.Delete(currentFs.FullName);
                     else
-                        File.Delete(path);
-                }
+                        File.Delete(currentFs.FullName);
+                } //to delete file or folder
 
                 if (cki.Key == ConsoleKey.LeftArrow)
                 {
@@ -167,7 +188,7 @@ namespace Task1
                     string nname = Console.ReadLine();
 
                     string npath = Path.Combine(direc.FullName, nname);
-                    if (currentFs.GetType() == typeof(FileInfo) )
+                    if (currentFs.GetType() == typeof(FileInfo))
                     {
                         File.Move(currentFs.FullName, npath);
                     }
@@ -175,8 +196,8 @@ namespace Task1
                     {
                         Directory.Move(currentFs.FullName, npath);
                     }
-                }
-            } while (cki.Key != ConsoleKey.Escape);
+                } // to rename file or folder
+            } while (cki.Key != ConsoleKey.Escape); // to go out of a program
         }
     }
 
@@ -184,9 +205,9 @@ namespace Task1
     {
         static void Main(string[] args)
         {
-            string path = "C:/Users/Acer/Desktop/test";
-            FarManager fm = new FarManager(path);
-            fm.Rabotay();
+            string path = "C:/Users/Acer/Desktop/test"; // folder that we work with
+            FarManager fm = new FarManager(path); 
+            fm.Rabotay(); // calling method
             Console.ReadKey();
         }
     }
