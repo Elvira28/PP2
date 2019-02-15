@@ -163,14 +163,17 @@ namespace Task1
 
                 if (cki.Key == ConsoleKey.LeftArrow)
                 {
-                    string nn = Path.Combine(path, "\\..");
+                    Console.Clear();
+                    string nname = Console.ReadLine();
+
+                    string npath = Path.Combine(direc.FullName, nname);
                     if (currentFs.GetType() == typeof(FileInfo) )
                     {
-                        File.Move(path, nn + Console.ReadLine());
+                        File.Move(currentFs.FullName, npath);
                     }
                     else
                     {
-                        Directory.Move(path, nn + Console.ReadLine());
+                        Directory.Move(currentFs.FullName, npath);
                     }
                 }
             } while (cki.Key != ConsoleKey.Escape);
