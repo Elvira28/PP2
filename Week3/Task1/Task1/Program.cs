@@ -5,13 +5,13 @@ namespace Task1
 {
     class FarManager
     {
+        public bool dir;
         public int cursor;
         public string path;
         public int size;
         public bool ok;
         DirectoryInfo direc = null;
         FileSystemInfo currentFs = null;
-        public bool check;
 
         public FarManager()
         {
@@ -22,6 +22,7 @@ namespace Task1
         {
             this.path = path;
             cursor = 0;
+            dir = true;
             direc = new DirectoryInfo(path);
             size = direc.GetFileSystemInfos().Length;
             ok = true;
@@ -37,13 +38,11 @@ namespace Task1
             }
             else if (fs.GetType() == typeof(FileInfo))
             {
-                check = false;
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Yellow;
             }
             else
             {
-                check = true;
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
             }
@@ -90,7 +89,7 @@ namespace Task1
 
             for (int i = 0; i < direc.GetFileSystemInfos().Length; i++)
             {
-                if (fs[i].Name[0] == '.')
+                if ((fs[i].Name[0] == '.' || fs[i].Name[0] == '$') && ok == false)
                     size--;
             }
 
@@ -98,12 +97,14 @@ namespace Task1
 
         public void Rabotay()
         {
-            ConsoleKeyInfo cki = Console.ReadKey();
-
-            while (cki.Key != ConsoleKey.Escape)
-            {
-                CalcS();
+            ConsoleKeyInfo cki;
+            do {
+                if (dir)
+                {
+                    CalcS();
+                }
                 Korset();
+                
                 cki = Console.ReadKey();
                 if (cki.Key == ConsoleKey.UpArrow)
                     UA();
@@ -123,42 +124,47 @@ namespace Task1
                 if (cki.Key == ConsoleKey.Enter)
                 {
                     cursor = 0;
-                    if (check)
+                    if (currentFs.GetType() == typeof(DirectoryInfo))
                     {
                         path = currentFs.FullName;
                     }
 
                     else
                     {
+                        Console.Clear();
                         string str;
-                        path = currentFs.FullName;
-                        StreamReader sr = new StreamReader(path);
+                        dir = false;
+                        FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                        StreamReader sr = new StreamReader(fs);
                         str = sr.ReadToEnd();
                         Console.WriteLine(str);
+                        Console.ReadKey();
                         sr.Close();
                     }
                 }
 
                 if (cki.Key == ConsoleKey.Backspace)
                 {
+                    
                     cursor = 0;
                     path = direc.Parent.FullName;
+                    dir = true;
                 }
+
+
 
                 if (cki.Key == ConsoleKey.Delete)
                 {
-                    path = currentFs.FullName;
-                    if (check)
+                    if (currentFs.GetType() == typeof(DirectoryInfo))
                         Directory.Delete(path);
                     else
                         File.Delete(path);
                 }
 
-                if (cki.Key == ConsoleKey.VolumeMute)
+                if (cki.Key == ConsoleKey.LeftArrow)
                 {
-                    path = currentFs.FullName;
                     string nn = Path.Combine(path, "\\..");
-                    if (check)
+                    if (currentFs.GetType() == typeof(FileInfo) )
                     {
                         File.Move(path, nn + Console.ReadLine());
                     }
@@ -167,7 +173,7 @@ namespace Task1
                         Directory.Move(path, nn + Console.ReadLine());
                     }
                 }
-            }
+            } while (cki.Key != ConsoleKey.Escape);
         }
     }
 
