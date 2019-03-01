@@ -12,14 +12,21 @@ namespace Task4
         {
             //считываем количество строк, переводим в integer;
             int n = int.Parse(Console.ReadLine());
+            string[,] a = new string[n,n];
 
-            //выводим треугольник по строчкам;
+            // заполняем двойной массив символами
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j <= i; j++)
                 {
-                    Console.Write("[*]");
-                } //для того, чтобы началась новая строка;
+                    a[i, j] = "[*] ";
+                } 
+            } 
+            // выводим массив в нужном порядке прописывая цикл, чтобы вышла елочка
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                    Console.Write(a[i, j]);
                 Console.WriteLine();
             }
 
