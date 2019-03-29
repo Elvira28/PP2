@@ -34,7 +34,8 @@ namespace Car
             {
                 foreach (Body b1 in wall)
                 {
-                    if (b1.x == b.x && b1.y == b.y)
+                    if (b1.x == b.x && b1.y == b.y
+                        )
                         return false;
                 }
             }
@@ -55,26 +56,23 @@ namespace Car
             {
                 Console.Clear();
 
-                for (int i = bb.Count - 1; i > 0; i--)
-                {
-                    if (!IsNotCol() && bb[i].x == 0)
+                    if (!IsNotCol() && ok)
                     {
-                        bb[i].x++;
+                        ok = false;
                     }
-                    else if (!IsNotCol())
-                        bb[i].x--;
-
-                    if (IsNotCol() && ok)
+                    else if (!IsNotCol() && !ok)
                     {
-                        bb[i].x++;
+                        ok = true;
                     }
-                    if (IsNotCol() && !ok)
+                    for (int i = bb.Count - 1; i >= 0; i--)
                     {
-                        bb[i].x--;
+                        if (ok)
+                            bb[i].x++;
+                        else
+                            bb[i].x--;
+                        Console.SetCursorPosition(bb[i].x, bb[i].y);
+                        Console.Write('*');
                     }
-                    Console.SetCursorPosition(bb[i].x, bb[i].y);
-                    Console.Write('*');
-                }
 
                 for (int i = wall.Count-1; i > 0; i--)
                 {
