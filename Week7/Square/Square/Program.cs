@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace Square
@@ -23,53 +26,43 @@ namespace Square
             Console.SetCursorPosition(0, 0);
             Console.Write("#");
 
-            Thread t = new Thread(work);
+            Thread t = new Thread(plz);
             t.Start();
-            Thread.Sleep(1000);
-            while (true)
-            {
-
-            }
+            Thread.Sleep(1000000);
         }
 
-        private static void work()
+        private static void plz()
         {
-            Console.SetCursorPosition(x, y);
-            Console.Write("*");
-            Console.SetCursorPosition(x, y);
-            Console.Write("#");
-
-            if (x == 9 && y == 0)
+            
+            while (true)
+            {
+                Console.SetCursorPosition(x, y);
+                Console.Write("*");
+                x += dx;
+                y += dy;
+                Console.SetCursorPosition(x, y);
+                Console.Write("#");
+                if (x == 9 && y == 0)
                 {
                     dx = 0;
                     dy = 1;
                 }
-
-            if (x == 9 && y == 9)
+                if (x == 9 && y == 9)
                 {
                     dx = -1;
                     dy = 0;
                 }
-
-            if (x == 0 && y == 9)
+                if (x == 0 && y == 9)
                 {
                     dx = 0;
                     dy = -1;
                 }
-
-            if (x == 0 && y == 0)
+                if (x == 0 && y == 0)
                 {
                     dx = 1;
                     dy = 0;
                 }
-
-            while (true)
-            {
-
-                x += dx;
-                y += dy;
             }
-                
         }
     }
 }

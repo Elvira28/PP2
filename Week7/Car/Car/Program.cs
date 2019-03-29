@@ -19,24 +19,26 @@ namespace Car
             for (int i = 0; i < rows.Length; i++)
             {
                 for (int j = 0; j < rows[i].Length; j++)
+                {
                     if ((bb != null) && (rows[i][j] == '*'))
                         bb.Add(new Body(j, i));
+                    if ((wall != null) && (rows[i][j] == '#'))
+                        wall.Add(new Body(j, i));
+                }
             }
         }
 
-        public static void ReadWall()
+        public static bool IsNotCol()
         {
-            StreamReader sr = new StreamReader("wall.txt");
-            string[] rows = sr.ReadToEnd().Split('\n');
-            for (int i = 0; i < rows.Length; i++)
-                for (int j = 0; j < rows[i].Length; j++)
-                    if (wall != null && rows[i][j] == '*')
-                        wall.Add(new Body(j, i));
-
-            for (int i = wall.Count; i > 0; i--)
+            foreach(Body b in bb)
             {
-                Console.Write('*');
+                foreach (Body b1 in wall)
+                {
+                    if (b1.x == b.x && b1.y == b.y)
+                        return false;
+                }
             }
+            return true;
         }
 
         public static void Direction(ConsoleKeyInfo kd)
@@ -46,25 +48,40 @@ namespace Car
             if (kd.Key == ConsoleKey.RightArrow)
                 ok = true;
         }
+
         public static void Draw()
         {
-            //kf = Console.ReadKey();
-            //Direction(kf);
             while (true)
             {
                 Console.Clear();
 
                 for (int i = bb.Count - 1; i > 0; i--)
                 {
-                    if (ok)
+                    if (!IsNotCol() && bb[i].x == 0)
                     {
                         bb[i].x++;
                     }
-                    if (ok == false) bb[i].x--;
+                    else if (!IsNotCol())
+                        bb[i].x--;
+
+                    if (IsNotCol() && ok)
+                    {
+                        bb[i].x++;
+                    }
+                    if (IsNotCol() && !ok)
+                    {
+                        bb[i].x--;
+                    }
                     Console.SetCursorPosition(bb[i].x, bb[i].y);
                     Console.Write('*');
                 }
-                Thread.Sleep(300);
+
+                for (int i = wall.Count-1; i > 0; i--)
+                {
+                    Console.SetCursorPosition(wall[i].x, wall[i].y);
+                    Console.Write('#');
+                }
+                Thread.Sleep(100);
             }
         }
 
@@ -72,8 +89,6 @@ namespace Car
         {
             Console.CursorVisible = false;
             ReadCar();
-            ReadWall();
-
             Thread thread = new Thread(Draw);
             thread.Start();
             while (true)
@@ -81,5 +96,6 @@ namespace Car
                 kf = Console.ReadKey();
                 Direction(kf);
             }
+        }
     }
 }
