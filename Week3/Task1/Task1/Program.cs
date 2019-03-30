@@ -66,7 +66,7 @@ namespace Task1
                     continue;
                 }              
                     Color(fs[i], i);
-                    Console.WriteLine(i+1 + ". " + fs[i].Name);               
+                    Console.WriteLine(i + ". " + fs[i].Name);
             }
 
         }
@@ -115,7 +115,9 @@ namespace Task1
             for (int i = 0; i < direc.GetFileSystemInfos().Length; i++)
             {
                 if ((fs[i].Name[0] == '.' || fs[i].Name[0] == '$') && hidden == false)
+                {
                     size--;
+                }
             }
 
         }
