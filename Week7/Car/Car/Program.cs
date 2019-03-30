@@ -30,7 +30,7 @@ namespace Car
 
         public static bool IsNotCol()
         {
-            foreach(Body b in bb)
+            foreach (Body b in bb)
             {
                 foreach (Body b1 in wall)
                 {
@@ -56,25 +56,25 @@ namespace Car
             {
                 Console.Clear();
 
-                    if (!IsNotCol() && ok)
-                    {
-                        ok = false;
-                    }
-                    else if (!IsNotCol() && !ok)
-                    {
-                        ok = true;
-                    }
-                    for (int i = bb.Count - 1; i >= 0; i--)
-                    {
-                        if (ok)
-                            bb[i].x++;
-                        else
-                            bb[i].x--;
-                        Console.SetCursorPosition(bb[i].x, bb[i].y);
-                        Console.Write('*');
-                    }
+                if (!IsNotCol() && ok)
+                {
+                    ok = false;
+                }
+                else if (!IsNotCol() && !ok)
+                {
+                    ok = true;
+                }
+                for (int i = bb.Count - 1; i >= 0; i--)
+                {
+                    if (ok)
+                        bb[i].x++;
+                    else
+                        bb[i].x--;
+                    Console.SetCursorPosition(bb[i].x, bb[i].y);
+                    Console.Write('*');
+                }
 
-                for (int i = wall.Count-1; i > 0; i--)
+                for (int i = wall.Count - 1; i > 0; i--)
                 {
                     Console.SetCursorPosition(wall[i].x, wall[i].y);
                     Console.Write('#');
